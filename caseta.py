@@ -1,9 +1,11 @@
 class Caseta:
-    def __init__(self, id_caseta, nombre_caseta, ubicacion):
-        self.id_caseta = id_caseta
-        self.nombre_caseta = nombre_caseta
+    def __init__(self, nombre, ubicacion):
+        self.nombre = nombre
         self.ubicacion = ubicacion
-        self.clientes = []
+        self.estudiantes_atendidos = []
 
-    def agregar_cliente(self, cliente):
-        self.clientes.append(cliente)
+    def atender_estudiante(self, estudiante):
+        self.estudiantes_atendidos.append(estudiante)
+
+    def __str__(self):
+        return f"Caseta {self.nombre} - Estudiantes atendidos: {len(self.estudiantes_atendidos)}"

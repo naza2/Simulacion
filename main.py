@@ -1,22 +1,37 @@
+from conectar_bdd import conectar_bdd
+from datos import cargar_casetas, cargar_encuestas
+from modelo import entrenar_modelo
+from visualizar import visualizar_distribucion
+
 from caseta import Caseta
+from estudiante import Estudiante
 
-from IntervaloFila import IntervaloFila
-from observacion import Observacion
-from simulacion import Simulacion
-# Crear casetas
-Caseta1 = Caseta(1, "Caseta Blanca", "Lado A")
-Caseta2 = Caseta(2, "CafeITO", "Lado B")
+def main():
+    conexion = conectar_bdd()
+    if conexion:
+        # Cargar datos desde la base de datos
+        casetas_data = cargar_casetas(conexion)
+        encuestas_data = cargar_encuestas(conexion)
 
-# Crear observación para la caseta blanca
-observacion_blanca = Observacion(1, "2023-10-25", "11:20", "12:20", 40, 2.31, Caseta2)
+        # Crear instancias de Caseta y Estudiante
+        casetas = [Caseta(nombre=caseta[1], ubicacion=(0, 0)) for caseta in casetas_data]  # Ubicación es temporal
+        estudiantes = [Estudiante(
+    horario_preferido=encuesta[2],
+    horas_libres=encuesta[3],
+    caseta_preferida=encuesta[4],
+    factor_influencia=encuesta[5],
+    tiempo_espera_dispuesto=encuesta[6],
+    presupuesto=encuesta[7]
+) for encuesta in encuestas_data]
 
-# Agregar intervalos de fila
-observacion_blanca.agregar_intervalo(IntervaloFila("11:25", 3))
-observacion_blanca.agregar_intervalo(IntervaloFila("11:30", 1))
-# (Continúa agregando intervalos según sea necesario)
 
-# Crear simulación
-simulacion = Simulacion([Caseta1, Caseta2], [observacion_blanca])
+        # Entrenar el modelo
+        entrenar_modelo(estudiantes, casetas)
 
-# Iniciar simulación
-simulacion.iniciar()
+        # Visualizar la distribución
+        visualizar_distribucion(casetas)
+
+        conexion.close()
+
+if __name__ == "__main__":
+    main()
