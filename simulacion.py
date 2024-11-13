@@ -1,4 +1,4 @@
-import random
+from algoritmo_a_estrella import a_star
 
 class Estudiante:
     def __init__(self, horario_preferido, horas_libres, caseta_preferida, factor_influencia, tiempo_espera_dispuesto, presupuesto):
@@ -10,20 +10,26 @@ class Estudiante:
         self.presupuesto = presupuesto
         self.ruta = []
 
-    def mover_a_caseta(self, caseta, densidad_mapa):
-        # Simula la ruta hacia la caseta preferida
-        x_inicial, y_inicial = random.uniform(0, 1), random.uniform(0, 1)  # Coordenadas de inicio
-        x_final, y_final = caseta.ubicacion
+    def mover_a_caseta(self, caseta, densidad_mapa, croquis_cuadricula):
+        inicio = (4, 1)  # Define una posición de inicio accesible
+        objetivo = caseta.posicion_cuadricula
 
-        # Simulación de movimiento hacia la caseta, añadiendo puntos a la ruta
-        pasos = 10  # Dividir el movimiento en 10 pasos
-        for i in range(pasos + 1):
-            x = x_inicial + (x_final - x_inicial) * i / pasos
-            y = y_inicial + (y_final - y_inicial) * i / pasos
+        # Calcular la ruta usando A*
+        ruta = a_star(croquis_cuadricula, inicio, objetivo)
+        
+        if ruta is None:
+            print(f"No se encontró una ruta desde {inicio} hasta {objetivo}.")
+            return
+        
+        print(f"Ruta encontrada desde {inicio} hasta {objetivo}: {ruta}")
+
+        # Registrar cada punto de la ruta en densidad_mapa
+        for punto in ruta:
+            x, y = punto[1] / len(croquis_cuadricula[0]), punto[0] / len(croquis_cuadricula)
             self.ruta.append((x, y))
-
-            # Incrementar la densidad en el mapa de calor en cada punto
+            
             if (x, y) in densidad_mapa:
                 densidad_mapa[(x, y)] += 1
             else:
                 densidad_mapa[(x, y)] = 1
+            print(f"Registrando punto en densidad_mapa: ({x}, {y})")

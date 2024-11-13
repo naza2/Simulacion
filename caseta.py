@@ -1,7 +1,8 @@
 class Caseta:
-    def __init__(self, nombre, ubicacion):
+    def __init__(self, nombre, ubicacion=None, posicion_cuadricula=None):
         self.nombre = nombre
         self.ubicacion = ubicacion
+        self.posicion_cuadricula = posicion_cuadricula
         self.estudiantes_atendidos = []
 
     def atender_estudiante(self, estudiante):
