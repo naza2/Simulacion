@@ -1,12 +1,6 @@
 class Caseta:
-    def __init__(self, nombre, ubicacion=None, posicion_cuadricula=None):
+    def __init__(self, nombre, ubicacion, tiempo_promedio_atencion, flujo_clientes):
         self.nombre = nombre
         self.ubicacion = ubicacion
-        self.posicion_cuadricula = posicion_cuadricula
-        self.estudiantes_atendidos = []
-
-    def atender_estudiante(self, estudiante):
-        self.estudiantes_atendidos.append(estudiante)
-
-    def __str__(self):
-        return f"Caseta {self.nombre} - Estudiantes atendidos: {len(self.estudiantes_atendidos)}"
+        self.tiempo_promedio_atencion = tiempo_promedio_atencion  # en minutos
+        self.flujo_clientes = flujo_clientes  # Número de clientes por hora
