@@ -10,13 +10,20 @@ class Main:
         self.conexion_db = ConectarBDD(dbname, user, password, host).conectar()
         self.casetas = self.obtener_casetas_bdd()  # Cargar casetas desde la base de datos
 
+    def limitar_valor(self, valor):
+        """
+        Limita el valor entre 1 y 5.
+        """
+        return max(1, min(5, valor))
+
     def obtener_casetas_bdd(self):
         """
-        Obtiene las casetas y sus características de la base de datos.
+        Obtiene las casetas y sus características de la base de datos y asegura que los valores están entre 1 y 5.
         """
         cursor = self.conexion_db.cursor()
         cursor.execute("""
-            SELECT nombre_caseta, ubicacion, tiempo_promedio_atencion, flujo_clientes
+            SELECT nombre_caseta, ubicacion, tiempo_promedio_atencion, flujo_clientes,
+                   variedad_productos, calidad_comida, precios
             FROM casetas
         """)
         resultados = cursor.fetchall()
@@ -26,52 +33,80 @@ class Main:
             caseta = Caseta(
                 nombre=row[0],
                 ubicacion=row[1],
-                tiempo_promedio_atencion=row[2],
-                flujo_clientes=row[3]
+                tiempo_promedio_atencion=self.limitar_valor(row[2]),
+                flujo_clientes=self.limitar_valor(row[3]),
+                variedad_productos=self.limitar_valor(row[4]),
+                calidad_comida=self.limitar_valor(row[5]),
+                precios=self.limitar_valor(row[6])
             )
             casetas.append(caseta)
         
         cursor.close()
         return casetas
 
-    def obtener_estudiantes_bdd(self):
+    def obtener_opciones_estudiantes(self):
         """
-        Obtiene los estudiantes y sus preferencias de la base de datos.
+        Obtiene las opciones posibles para cada característica de los estudiantes desde la base de datos.
         """
         cursor = self.conexion_db.cursor()
-        cursor.execute("""
-            SELECT horario_preferido, horas_libres, caseta_preferida, factor_influencia,
-                   tiempo_espera_dispuesto, presupuesto
-            FROM encuestas_estudiantes
-        """)
-        resultados = cursor.fetchall()
-        
+
+        # Obtener opciones para cada característica
+        cursor.execute("SELECT DISTINCT horario_preferido FROM encuestas_estudiantes")
+        horarios = [row[0] for row in cursor.fetchall()]
+
+        cursor.execute("SELECT DISTINCT horas_libres FROM encuestas_estudiantes")
+        horas_libres = [row[0] for row in cursor.fetchall()]
+
+        cursor.execute("SELECT DISTINCT caseta_preferida FROM encuestas_estudiantes")
+        casetas_preferidas = [row[0] for row in cursor.fetchall()]
+
+        cursor.execute("SELECT DISTINCT factor_influencia FROM encuestas_estudiantes")
+        factores_influencia = [row[0] for row in cursor.fetchall()]
+
+        cursor.execute("SELECT DISTINCT tiempo_espera_dispuesto FROM encuestas_estudiantes")
+        tiempos_espera_dispuesto = [row[0] for row in cursor.fetchall()]
+
+        cursor.execute("SELECT DISTINCT presupuesto FROM encuestas_estudiantes")
+        presupuestos = [row[0] for row in cursor.fetchall()]
+
+        cursor.close()
+
+        return horarios, horas_libres, casetas_preferidas, factores_influencia, tiempos_espera_dispuesto, presupuestos
+
+    def generar_estudiantes(self, cantidad):
+        """
+        Genera estudiantes en base a las opciones de la base de datos y añade aleatorios si es necesario.
+        """
+        # Obtener todas las opciones de la base de datos
+        horarios, horas_libres, casetas_preferidas, factores_influencia, tiempos_espera_dispuesto, presupuestos = self.obtener_opciones_estudiantes()
+
         estudiantes = []
-        for row in resultados:
+        for _ in range(cantidad):
             estudiante = Estudiante(
-                horario_preferido=row[0],
-                horas_libres=row[1],
-                caseta_preferida=row[2],
-                factor_influencia=row[3],
-                tiempo_espera_dispuesto=row[4],
-                presupuesto=row[5]
+                horario_preferido=random.choice(horarios),
+                horas_libres=random.choice(horas_libres),
+                caseta_preferida=random.choice(casetas_preferidas),
+                factor_influencia=random.choice(factores_influencia),
+                tiempo_espera_dispuesto=random.choice(tiempos_espera_dispuesto),
+                presupuesto=random.choice(presupuestos)
             )
             estudiantes.append(estudiante)
         
-        cursor.close()
         return estudiantes
 
     def elegir_caseta_por_preferencia(self, estudiante):
         """
-        Elige una caseta para el estudiante según sus preferencias.
+        Elige una caseta para el estudiante según sus preferencias extendidas.
         """
         preferencia = estudiante.factor_influencia
         if preferencia == "Calidad de los alimentos":
-            seleccion = min(self.casetas, key=lambda c: c.tiempo_promedio_atencion)
+            seleccion = max(self.casetas, key=lambda c: c.calidad_comida)
         elif preferencia == "Rapidez en la entrega de tu pedido":
             seleccion = min(self.casetas, key=lambda c: c.tiempo_promedio_atencion)
         elif preferencia == "Variedad de opciones":
-            seleccion = max(self.casetas, key=lambda c: c.flujo_clientes)
+            seleccion = max(self.casetas, key=lambda c: c.variedad_productos)
+        elif preferencia == "Precios":
+            seleccion = min(self.casetas, key=lambda c: c.precios)
         else:
             seleccion = random.choice(self.casetas)
 
@@ -99,15 +134,17 @@ class Main:
                 ])
         print("Datos de estudiantes guardados en estudiantes.csv")
 
-    def iniciar_generacion_estudiantes(self):
-        # Obtener estudiantes desde la base de datos
-        estudiantes = self.obtener_estudiantes_bdd()
-        print(f"Generando {len(estudiantes)} estudiantes y sus preferencias desde la base de datos...")
+    def iniciar_generacion_estudiantes(self, cantidad):
+        # Generar estudiantes en base a la información de la base de datos y de forma aleatoria si es necesario
+        estudiantes = self.generar_estudiantes(cantidad)
+        print(f"Generando {len(estudiantes)} estudiantes en base a la información de la BDD...")
 
         # Guardar resultados en CSV
         self.guardar_estudiantes_en_csv(estudiantes)
 
 # Ejecución principal
 if __name__ == "__main__":
+    # Solicitar la cantidad de estudiantes al usuario
+    cantidad = int(input("Ingrese la cantidad de estudiantes que desea generar: "))
     main = Main(dbname="Simulacion", user="diego", password="facilita", host="localhost")
-    main.iniciar_generacion_estudiantes()
+    main.iniciar_generacion_estudiantes(cantidad)
