@@ -5,8 +5,6 @@
 -- Dumped from database version 14.13 (Ubuntu 14.13-0ubuntu0.22.04.1)
 -- Dumped by pg_dump version 14.13 (Ubuntu 14.13-0ubuntu0.22.04.1)
 
--- Started on 2024-11-12 22:03:15 CST
-
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
@@ -23,7 +21,49 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- TOC entry 216 (class 1259 OID 16825)
+-- Name: casetas; Type: TABLE; Schema: public; Owner: diego
+--
+
+CREATE TABLE public.casetas (
+    id_caseta integer NOT NULL,
+    nombre_caseta character varying(50) NOT NULL,
+    ubicacion character varying(50) NOT NULL,
+    tiempo_promedio_atencion numeric,
+    flujo_clientes integer,
+    variedad_productos integer,
+    calidad_comida integer,
+    precios integer,
+    CONSTRAINT casetas_calidad_comida_check CHECK (((calidad_comida >= 1) AND (calidad_comida <= 5))),
+    CONSTRAINT casetas_precios_check CHECK (((precios >= 1) AND (precios <= 5))),
+    CONSTRAINT casetas_variedad_productos_check CHECK (((variedad_productos >= 1) AND (variedad_productos <= 5)))
+);
+
+
+ALTER TABLE public.casetas OWNER TO diego;
+
+--
+-- Name: casetas_id_caseta_seq; Type: SEQUENCE; Schema: public; Owner: diego
+--
+
+CREATE SEQUENCE public.casetas_id_caseta_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.casetas_id_caseta_seq OWNER TO diego;
+
+--
+-- Name: casetas_id_caseta_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: diego
+--
+
+ALTER SEQUENCE public.casetas_id_caseta_seq OWNED BY public.casetas.id_caseta;
+
+
+--
 -- Name: encuestas_estudiantes; Type: TABLE; Schema: public; Owner: diego
 --
 
@@ -39,14 +79,14 @@ CREATE TABLE public.encuestas_estudiantes (
     presupuesto character varying(40),
     experiencia_general integer,
     experiencia_filas character varying(5),
-    espera_promedio_filas character varying(40)
+    espera_promedio_filas character varying(40),
+    id_caseta integer
 );
 
 
 ALTER TABLE public.encuestas_estudiantes OWNER TO diego;
 
 --
--- TOC entry 215 (class 1259 OID 16824)
 -- Name: encuestas_estudiantes_id_encuesta_seq; Type: SEQUENCE; Schema: public; Owner: diego
 --
 
@@ -62,8 +102,6 @@ CREATE SEQUENCE public.encuestas_estudiantes_id_encuesta_seq
 ALTER TABLE public.encuestas_estudiantes_id_encuesta_seq OWNER TO diego;
 
 --
--- TOC entry 3428 (class 0 OID 0)
--- Dependencies: 215
 -- Name: encuestas_estudiantes_id_encuesta_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: diego
 --
 
@@ -71,7 +109,6 @@ ALTER SEQUENCE public.encuestas_estudiantes_id_encuesta_seq OWNED BY public.encu
 
 
 --
--- TOC entry 214 (class 1259 OID 16806)
 -- Name: intervalos_fila; Type: TABLE; Schema: public; Owner: diego
 --
 
@@ -86,7 +123,6 @@ CREATE TABLE public.intervalos_fila (
 ALTER TABLE public.intervalos_fila OWNER TO diego;
 
 --
--- TOC entry 213 (class 1259 OID 16805)
 -- Name: intervalos_fila_id_intervalo_seq; Type: SEQUENCE; Schema: public; Owner: diego
 --
 
@@ -102,8 +138,6 @@ CREATE SEQUENCE public.intervalos_fila_id_intervalo_seq
 ALTER TABLE public.intervalos_fila_id_intervalo_seq OWNER TO diego;
 
 --
--- TOC entry 3429 (class 0 OID 0)
--- Dependencies: 213
 -- Name: intervalos_fila_id_intervalo_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: diego
 --
 
@@ -111,7 +145,6 @@ ALTER SEQUENCE public.intervalos_fila_id_intervalo_seq OWNED BY public.intervalo
 
 
 --
--- TOC entry 210 (class 1259 OID 16787)
 -- Name: observaciones_caseta; Type: TABLE; Schema: public; Owner: diego
 --
 
@@ -129,7 +162,6 @@ CREATE TABLE public.observaciones_caseta (
 ALTER TABLE public.observaciones_caseta OWNER TO diego;
 
 --
--- TOC entry 209 (class 1259 OID 16786)
 -- Name: observaciones_caseta_id_observacion_seq; Type: SEQUENCE; Schema: public; Owner: diego
 --
 
@@ -145,8 +177,6 @@ CREATE SEQUENCE public.observaciones_caseta_id_observacion_seq
 ALTER TABLE public.observaciones_caseta_id_observacion_seq OWNER TO diego;
 
 --
--- TOC entry 3430 (class 0 OID 0)
--- Dependencies: 209
 -- Name: observaciones_caseta_id_observacion_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: diego
 --
 
@@ -154,7 +184,6 @@ ALTER SEQUENCE public.observaciones_caseta_id_observacion_seq OWNED BY public.ob
 
 
 --
--- TOC entry 212 (class 1259 OID 16794)
 -- Name: tiempos_atencion; Type: TABLE; Schema: public; Owner: diego
 --
 
@@ -168,7 +197,6 @@ CREATE TABLE public.tiempos_atencion (
 ALTER TABLE public.tiempos_atencion OWNER TO diego;
 
 --
--- TOC entry 211 (class 1259 OID 16793)
 -- Name: tiempos_atencion_id_tiempo_seq; Type: SEQUENCE; Schema: public; Owner: diego
 --
 
@@ -184,8 +212,6 @@ CREATE SEQUENCE public.tiempos_atencion_id_tiempo_seq
 ALTER TABLE public.tiempos_atencion_id_tiempo_seq OWNER TO diego;
 
 --
--- TOC entry 3431 (class 0 OID 0)
--- Dependencies: 211
 -- Name: tiempos_atencion_id_tiempo_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: diego
 --
 
@@ -193,7 +219,13 @@ ALTER SEQUENCE public.tiempos_atencion_id_tiempo_seq OWNED BY public.tiempos_ate
 
 
 --
--- TOC entry 3265 (class 2604 OID 16828)
+-- Name: casetas id_caseta; Type: DEFAULT; Schema: public; Owner: diego
+--
+
+ALTER TABLE ONLY public.casetas ALTER COLUMN id_caseta SET DEFAULT nextval('public.casetas_id_caseta_seq'::regclass);
+
+
+--
 -- Name: encuestas_estudiantes id_encuesta; Type: DEFAULT; Schema: public; Owner: diego
 --
 
@@ -201,7 +233,6 @@ ALTER TABLE ONLY public.encuestas_estudiantes ALTER COLUMN id_encuesta SET DEFAU
 
 
 --
--- TOC entry 3264 (class 2604 OID 16809)
 -- Name: intervalos_fila id_intervalo; Type: DEFAULT; Schema: public; Owner: diego
 --
 
@@ -209,7 +240,6 @@ ALTER TABLE ONLY public.intervalos_fila ALTER COLUMN id_intervalo SET DEFAULT ne
 
 
 --
--- TOC entry 3262 (class 2604 OID 16790)
 -- Name: observaciones_caseta id_observacion; Type: DEFAULT; Schema: public; Owner: diego
 --
 
@@ -217,7 +247,6 @@ ALTER TABLE ONLY public.observaciones_caseta ALTER COLUMN id_observacion SET DEF
 
 
 --
--- TOC entry 3263 (class 2604 OID 16797)
 -- Name: tiempos_atencion id_tiempo; Type: DEFAULT; Schema: public; Owner: diego
 --
 
@@ -225,26 +254,33 @@ ALTER TABLE ONLY public.tiempos_atencion ALTER COLUMN id_tiempo SET DEFAULT next
 
 
 --
--- TOC entry 3422 (class 0 OID 16825)
--- Dependencies: 216
--- Data for Name: encuestas_estudiantes; Type: TABLE DATA; Schema: public; Owner: diego
+-- Data for Name: casetas; Type: TABLE DATA; Schema: public; Owner: diego
 --
 
-COPY public.encuestas_estudiantes (id_encuesta, semestre, frecuencia_compra, horario_preferido, horas_libres, caseta_preferida, factor_influencia, tiempo_espera_dispuesto, presupuesto, experiencia_general, experiencia_filas, espera_promedio_filas) FROM stdin;
-1	Primero	Diariamente	10-12	2 horas	CafeITO	Calidad	menos de 5	30 - 50	5	Sí	10 - 20 min
-2	Tercero	2 - 3 veces	12-2	1 hora	Caseta Blanca	Precios	5 - 10 min	50 - 70	4	Sí	20 - 30 min
-3	Quinto	1 vez	8-10	3 horas	CafeITO	Atención	menos de 5	30 - 50	3	No	\N
-4	Septimo	Diariamente	10-12	1 hora	Lado Chedraui	Variedad	menos de 5	50 - 70	4	Sí	10 - 20 min
-5	Noveno	Nunca	no tengo horario especifico	No tengo libre	Caseta Blanca	Rapidez	5 - 10 min	menos de 30	2	No	\N
-6	Primero	2 - 3 veces	10-12	2 horas	CafeITO	Calidad	10 - 15 min	30 - 50	3	Sí	10 - 20 min
-7	Tercero	Diaramente	8-10	3 horas	Lado Chedraui	Espacio	5 - 10 min	50 - 70	4	Sí	10 - 20 min
-8	Quinto	1 vez	2-4	2 horas	Caseta Blanca	Precios	15 - 20 min	50 - 70	3	No	\N
+COPY public.casetas (id_caseta, nombre_caseta, ubicacion, tiempo_promedio_atencion, flujo_clientes, variedad_productos, calidad_comida, precios) FROM stdin;
+3	Lado Chedraui	Aun lado de chedraui	4	4	4	4	4
+2	Caseta Blanca	Aun lado del centro de informacion	1	2	3	3	3
+1	CafeITO	Atras del centro de informacion	2	2	3	2	2
 \.
 
 
 --
--- TOC entry 3420 (class 0 OID 16806)
--- Dependencies: 214
+-- Data for Name: encuestas_estudiantes; Type: TABLE DATA; Schema: public; Owner: diego
+--
+
+COPY public.encuestas_estudiantes (id_encuesta, semestre, frecuencia_compra, horario_preferido, horas_libres, caseta_preferida, factor_influencia, tiempo_espera_dispuesto, presupuesto, experiencia_general, experiencia_filas, espera_promedio_filas, id_caseta) FROM stdin;
+1	Primero	Diariamente	10-12	2 horas	CafeITO	Calidad	menos de 5	30 - 50	5	Sí	10 - 20 min	\N
+2	Tercero	2 - 3 veces	12-2	1 hora	Caseta Blanca	Precios	5 - 10 min	50 - 70	4	Sí	20 - 30 min	\N
+3	Quinto	1 vez	8-10	3 horas	CafeITO	Atención	menos de 5	30 - 50	3	No	\N	\N
+4	Septimo	Diariamente	10-12	1 hora	Lado Chedraui	Variedad	menos de 5	50 - 70	4	Sí	10 - 20 min	\N
+5	Noveno	Nunca	no tengo horario especifico	No tengo libre	Caseta Blanca	Rapidez	5 - 10 min	menos de 30	2	No	\N	\N
+6	Primero	2 - 3 veces	10-12	2 horas	CafeITO	Calidad	10 - 15 min	30 - 50	3	Sí	10 - 20 min	\N
+7	Tercero	Diaramente	8-10	3 horas	Lado Chedraui	Espacio	5 - 10 min	50 - 70	4	Sí	10 - 20 min	\N
+8	Quinto	1 vez	2-4	2 horas	Caseta Blanca	Precios	15 - 20 min	50 - 70	3	No	\N	\N
+\.
+
+
+--
 -- Data for Name: intervalos_fila; Type: TABLE DATA; Schema: public; Owner: diego
 --
 
@@ -303,8 +339,6 @@ COPY public.intervalos_fila (id_intervalo, id_observacion, hora_intervalo, perso
 
 
 --
--- TOC entry 3416 (class 0 OID 16787)
--- Dependencies: 210
 -- Data for Name: observaciones_caseta; Type: TABLE DATA; Schema: public; Owner: diego
 --
 
@@ -333,8 +367,6 @@ COPY public.observaciones_caseta (id_observacion, caseta, fecha, hora_inicio, ho
 
 
 --
--- TOC entry 3418 (class 0 OID 16794)
--- Dependencies: 212
 -- Data for Name: tiempos_atencion; Type: TABLE DATA; Schema: public; Owner: diego
 --
 
@@ -443,8 +475,13 @@ COPY public.tiempos_atencion (id_tiempo, id_observacion, tiempo_atencion) FROM s
 
 
 --
--- TOC entry 3432 (class 0 OID 0)
--- Dependencies: 215
+-- Name: casetas_id_caseta_seq; Type: SEQUENCE SET; Schema: public; Owner: diego
+--
+
+SELECT pg_catalog.setval('public.casetas_id_caseta_seq', 1, false);
+
+
+--
 -- Name: encuestas_estudiantes_id_encuesta_seq; Type: SEQUENCE SET; Schema: public; Owner: diego
 --
 
@@ -452,8 +489,6 @@ SELECT pg_catalog.setval('public.encuestas_estudiantes_id_encuesta_seq', 8, true
 
 
 --
--- TOC entry 3433 (class 0 OID 0)
--- Dependencies: 213
 -- Name: intervalos_fila_id_intervalo_seq; Type: SEQUENCE SET; Schema: public; Owner: diego
 --
 
@@ -461,8 +496,6 @@ SELECT pg_catalog.setval('public.intervalos_fila_id_intervalo_seq', 50, true);
 
 
 --
--- TOC entry 3434 (class 0 OID 0)
--- Dependencies: 209
 -- Name: observaciones_caseta_id_observacion_seq; Type: SEQUENCE SET; Schema: public; Owner: diego
 --
 
@@ -470,8 +503,6 @@ SELECT pg_catalog.setval('public.observaciones_caseta_id_observacion_seq', 20, t
 
 
 --
--- TOC entry 3435 (class 0 OID 0)
--- Dependencies: 211
 -- Name: tiempos_atencion_id_tiempo_seq; Type: SEQUENCE SET; Schema: public; Owner: diego
 --
 
@@ -479,7 +510,14 @@ SELECT pg_catalog.setval('public.tiempos_atencion_id_tiempo_seq', 100, true);
 
 
 --
--- TOC entry 3273 (class 2606 OID 16830)
+-- Name: casetas casetas_pkey; Type: CONSTRAINT; Schema: public; Owner: diego
+--
+
+ALTER TABLE ONLY public.casetas
+    ADD CONSTRAINT casetas_pkey PRIMARY KEY (id_caseta);
+
+
+--
 -- Name: encuestas_estudiantes encuestas_estudiantes_pkey; Type: CONSTRAINT; Schema: public; Owner: diego
 --
 
@@ -488,7 +526,6 @@ ALTER TABLE ONLY public.encuestas_estudiantes
 
 
 --
--- TOC entry 3271 (class 2606 OID 16811)
 -- Name: intervalos_fila intervalos_fila_pkey; Type: CONSTRAINT; Schema: public; Owner: diego
 --
 
@@ -497,7 +534,6 @@ ALTER TABLE ONLY public.intervalos_fila
 
 
 --
--- TOC entry 3267 (class 2606 OID 16792)
 -- Name: observaciones_caseta observaciones_caseta_pkey; Type: CONSTRAINT; Schema: public; Owner: diego
 --
 
@@ -506,7 +542,6 @@ ALTER TABLE ONLY public.observaciones_caseta
 
 
 --
--- TOC entry 3269 (class 2606 OID 16799)
 -- Name: tiempos_atencion tiempos_atencion_pkey; Type: CONSTRAINT; Schema: public; Owner: diego
 --
 
@@ -515,7 +550,14 @@ ALTER TABLE ONLY public.tiempos_atencion
 
 
 --
--- TOC entry 3275 (class 2606 OID 16812)
+-- Name: encuestas_estudiantes encuestas_estudiantes_id_caseta_fkey; Type: FK CONSTRAINT; Schema: public; Owner: diego
+--
+
+ALTER TABLE ONLY public.encuestas_estudiantes
+    ADD CONSTRAINT encuestas_estudiantes_id_caseta_fkey FOREIGN KEY (id_caseta) REFERENCES public.casetas(id_caseta);
+
+
+--
 -- Name: intervalos_fila intervalos_fila_id_observacion_fkey; Type: FK CONSTRAINT; Schema: public; Owner: diego
 --
 
@@ -524,15 +566,12 @@ ALTER TABLE ONLY public.intervalos_fila
 
 
 --
--- TOC entry 3274 (class 2606 OID 16800)
 -- Name: tiempos_atencion tiempos_atencion_id_observacion_fkey; Type: FK CONSTRAINT; Schema: public; Owner: diego
 --
 
 ALTER TABLE ONLY public.tiempos_atencion
     ADD CONSTRAINT tiempos_atencion_id_observacion_fkey FOREIGN KEY (id_observacion) REFERENCES public.observaciones_caseta(id_observacion);
 
-
--- Completed on 2024-11-12 22:03:15 CST
 
 --
 -- PostgreSQL database dump complete
