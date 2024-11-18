@@ -1,3 +1,4 @@
+# estudiante.py
 class Estudiante:
     def __init__(self, horario_preferido, horas_libres, caseta_preferida, factor_influencia, tiempo_espera_dispuesto, presupuesto):
         self.horario_preferido = horario_preferido
