@@ -1,21 +1,101 @@
 Horario Preferido,Horas Libres,Caseta Preferida,Factor Influencia,Tiempo Espera Dispuesto,Presupuesto,Caseta Elegida
-no tengo horario especifico,1 hora,Lado Chedraui,Variedad,15 - 20 min,30 - 50,Caseta CafeITO
-8-10,2 horas,CafeITO,Variedad,15 - 20 min,50 - 70,Casetas Chedraui
-2-4,1 hora,Caseta Blanca,Calidad,15 - 20 min,menos de 30,Casetas Chedraui
-2-4,3 horas,CafeITO,Precios,5 - 10 min,menos de 30,Casetas Chedraui
-10-12,2 horas,Caseta Blanca,Calidad,5 - 10 min,menos de 30,Caseta Caseta Blanca
-no tengo horario especifico,No tengo libre,CafeITO,Rapidez,menos de 5,menos de 30,Caseta CafeITO
-8-10,1 hora,Caseta Blanca,Atención,menos de 5,30 - 50,Caseta Caseta Blanca
-no tengo horario especifico,3 horas,Lado Chedraui,Precios,menos de 5,30 - 50,Casetas Chedraui
-no tengo horario especifico,3 horas,Caseta Blanca,Espacio,5 - 10 min,menos de 30,Caseta CafeITO
-8-10,3 horas,Caseta Blanca,Calidad,15 - 20 min,menos de 30,Caseta CafeITO
-no tengo horario especifico,2 horas,Lado Chedraui,Espacio,5 - 10 min,menos de 30,Caseta CafeITO
-10-12,No tengo libre,Caseta Blanca,Espacio,menos de 5,30 - 50,Caseta CafeITO
-2-4,2 horas,CafeITO,Calidad,10 - 15 min,menos de 30,Caseta CafeITO
-10-12,1 hora,Lado Chedraui,Espacio,15 - 20 min,30 - 50,Casetas Chedraui
-no tengo horario especifico,No tengo libre,Lado Chedraui,Precios,15 - 20 min,30 - 50,Casetas Chedraui
-12-2,1 hora,CafeITO,Calidad,10 - 15 min,menos de 30,Caseta Caseta Blanca
-8-10,2 horas,CafeITO,Rapidez,15 - 20 min,menos de 30,Caseta Caseta Blanca
-8-10,1 hora,CafeITO,Precios,5 - 10 min,menos de 30,Casetas Chedraui
-no tengo horario especifico,3 horas,CafeITO,Atención,menos de 5,50 - 70,Casetas Chedraui
-8-10,No tengo libre,CafeITO,Variedad,5 - 10 min,50 - 70,Caseta Caseta Blanca
+8-10,2 horas,Lado Chedraui,Variedad,menos de 5,menos de 30,Caseta CafeITO
+no tengo horario especifico,No tengo libre,CafeITO,Precios,10 - 15 min,50 - 70,Caseta Caseta Blanca
+10-12,3 horas,Caseta Blanca,Calidad,menos de 5,menos de 30,Caseta CafeITO
+2-4,2 horas,CafeITO,Variedad,5 - 10 min,menos de 30,Caseta Caseta Blanca
+10-12,1 hora,CafeITO,Calidad,5 - 10 min,30 - 50,Casetas Chedraui
+no tengo horario especifico,1 hora,Caseta Blanca,Calidad,menos de 5,50 - 70,Caseta Caseta Blanca
+12-2,2 horas,Caseta Blanca,Atención,10 - 15 min,30 - 50,Caseta CafeITO
+2-4,2 horas,Caseta Blanca,Precios,15 - 20 min,menos de 30,Caseta Caseta Blanca
+no tengo horario especifico,2 horas,Caseta Blanca,Atención,5 - 10 min,menos de 30,Caseta CafeITO
+10-12,3 horas,CafeITO,Precios,5 - 10 min,menos de 30,Caseta Caseta Blanca
+12-2,No tengo libre,Caseta Blanca,Variedad,5 - 10 min,menos de 30,Caseta CafeITO
+8-10,2 horas,Lado Chedraui,Variedad,menos de 5,30 - 50,Casetas Chedraui
+10-12,3 horas,Caseta Blanca,Calidad,15 - 20 min,50 - 70,Caseta CafeITO
+12-2,2 horas,Caseta Blanca,Precios,10 - 15 min,30 - 50,Caseta Caseta Blanca
+12-2,2 horas,Caseta Blanca,Variedad,5 - 10 min,30 - 50,Caseta CafeITO
+12-2,2 horas,CafeITO,Atención,5 - 10 min,30 - 50,Caseta Caseta Blanca
+10-12,2 horas,CafeITO,Atención,5 - 10 min,30 - 50,Caseta CafeITO
+12-2,1 hora,CafeITO,Precios,10 - 15 min,30 - 50,Caseta Caseta Blanca
+8-10,2 horas,Caseta Blanca,Calidad,5 - 10 min,30 - 50,Casetas Chedraui
+10-12,1 hora,Lado Chedraui,Variedad,5 - 10 min,menos de 30,Caseta CafeITO
+12-2,1 hora,Caseta Blanca,Calidad,5 - 10 min,50 - 70,Caseta Caseta Blanca
+8-10,1 hora,CafeITO,Variedad,5 - 10 min,50 - 70,Casetas Chedraui
+10-12,1 hora,Caseta Blanca,Precios,5 - 10 min,50 - 70,Caseta Caseta Blanca
+10-12,2 horas,CafeITO,Calidad,menos de 5,menos de 30,Caseta CafeITO
+10-12,1 hora,Caseta Blanca,Calidad,15 - 20 min,50 - 70,Caseta CafeITO
+8-10,2 horas,Lado Chedraui,Atención,menos de 5,50 - 70,Casetas Chedraui
+8-10,1 hora,CafeITO,Precios,5 - 10 min,30 - 50,Caseta Caseta Blanca
+2-4,1 hora,Lado Chedraui,Variedad,10 - 15 min,30 - 50,Casetas Chedraui
+12-2,1 hora,Caseta Blanca,Espacio,5 - 10 min,30 - 50,Casetas Chedraui
+no tengo horario especifico,No tengo libre,CafeITO,Atención,5 - 10 min,50 - 70,Caseta CafeITO
+no tengo horario especifico,No tengo libre,Lado Chedraui,Variedad,5 - 10 min,50 - 70,Caseta Caseta Blanca
+no tengo horario especifico,2 horas,CafeITO,Precios,5 - 10 min,30 - 50,Caseta Caseta Blanca
+10-12,3 horas,CafeITO,Precios,15 - 20 min,30 - 50,Caseta Caseta Blanca
+no tengo horario especifico,2 horas,Caseta Blanca,Variedad,5 - 10 min,30 - 50,Caseta Caseta Blanca
+8-10,2 horas,Caseta Blanca,Calidad,5 - 10 min,30 - 50,Casetas Chedraui
+2-4,2 horas,CafeITO,Precios,5 - 10 min,50 - 70,Caseta Caseta Blanca
+2-4,2 horas,Caseta Blanca,Rapidez,15 - 20 min,menos de 30,Casetas Chedraui
+10-12,2 horas,Caseta Blanca,Precios,10 - 15 min,menos de 30,Caseta Caseta Blanca
+2-4,3 horas,Lado Chedraui,Calidad,menos de 5,50 - 70,Caseta CafeITO
+no tengo horario especifico,3 horas,CafeITO,Espacio,menos de 5,30 - 50,Casetas Chedraui
+8-10,1 hora,Caseta Blanca,Atención,10 - 15 min,menos de 30,Caseta Caseta Blanca
+8-10,3 horas,Lado Chedraui,Calidad,10 - 15 min,30 - 50,Caseta CafeITO
+10-12,2 horas,Lado Chedraui,Precios,5 - 10 min,50 - 70,Caseta Caseta Blanca
+no tengo horario especifico,2 horas,CafeITO,Variedad,5 - 10 min,30 - 50,Caseta Caseta Blanca
+8-10,2 horas,Lado Chedraui,Atención,5 - 10 min,50 - 70,Caseta Caseta Blanca
+10-12,2 horas,CafeITO,Calidad,15 - 20 min,50 - 70,Casetas Chedraui
+10-12,1 hora,Lado Chedraui,Variedad,5 - 10 min,50 - 70,Casetas Chedraui
+8-10,3 horas,CafeITO,Precios,menos de 5,menos de 30,Caseta Caseta Blanca
+10-12,3 horas,Lado Chedraui,Espacio,10 - 15 min,30 - 50,Caseta CafeITO
+2-4,No tengo libre,Lado Chedraui,Calidad,menos de 5,30 - 50,Caseta CafeITO
+10-12,2 horas,Caseta Blanca,Espacio,5 - 10 min,50 - 70,Caseta CafeITO
+no tengo horario especifico,2 horas,Lado Chedraui,Precios,15 - 20 min,50 - 70,Caseta Caseta Blanca
+2-4,1 hora,Lado Chedraui,Calidad,menos de 5,menos de 30,Casetas Chedraui
+10-12,1 hora,Caseta Blanca,Calidad,15 - 20 min,50 - 70,Caseta CafeITO
+2-4,No tengo libre,Lado Chedraui,Precios,menos de 5,50 - 70,Caseta Caseta Blanca
+2-4,2 horas,Lado Chedraui,Rapidez,10 - 15 min,50 - 70,Casetas Chedraui
+10-12,2 horas,Lado Chedraui,Atención,menos de 5,50 - 70,Caseta CafeITO
+10-12,2 horas,CafeITO,Precios,menos de 5,50 - 70,Caseta Caseta Blanca
+10-12,2 horas,Lado Chedraui,Precios,15 - 20 min,30 - 50,Caseta Caseta Blanca
+12-2,3 horas,Caseta Blanca,Calidad,15 - 20 min,30 - 50,Caseta Caseta Blanca
+2-4,2 horas,Lado Chedraui,Calidad,15 - 20 min,50 - 70,Caseta CafeITO
+8-10,3 horas,CafeITO,Espacio,5 - 10 min,30 - 50,Casetas Chedraui
+10-12,2 horas,Caseta Blanca,Precios,5 - 10 min,menos de 30,Caseta Caseta Blanca
+no tengo horario especifico,2 horas,Lado Chedraui,Atención,5 - 10 min,50 - 70,Caseta Caseta Blanca
+8-10,3 horas,CafeITO,Calidad,5 - 10 min,30 - 50,Caseta CafeITO
+8-10,2 horas,CafeITO,Precios,menos de 5,30 - 50,Caseta Caseta Blanca
+10-12,No tengo libre,CafeITO,Precios,5 - 10 min,30 - 50,Caseta Caseta Blanca
+8-10,2 horas,CafeITO,Espacio,10 - 15 min,50 - 70,Caseta Caseta Blanca
+no tengo horario especifico,1 hora,CafeITO,Precios,5 - 10 min,30 - 50,Caseta Caseta Blanca
+8-10,2 horas,Caseta Blanca,Atención,menos de 5,30 - 50,Caseta CafeITO
+10-12,1 hora,Caseta Blanca,Precios,5 - 10 min,30 - 50,Caseta Caseta Blanca
+10-12,3 horas,CafeITO,Atención,5 - 10 min,30 - 50,Caseta CafeITO
+10-12,No tengo libre,Lado Chedraui,Calidad,menos de 5,50 - 70,Casetas Chedraui
+no tengo horario especifico,1 hora,CafeITO,Calidad,5 - 10 min,50 - 70,Casetas Chedraui
+2-4,3 horas,CafeITO,Calidad,menos de 5,50 - 70,Caseta Caseta Blanca
+10-12,2 horas,Caseta Blanca,Calidad,15 - 20 min,50 - 70,Caseta Caseta Blanca
+no tengo horario especifico,No tengo libre,Lado Chedraui,Calidad,10 - 15 min,50 - 70,Caseta Caseta Blanca
+2-4,3 horas,Lado Chedraui,Calidad,5 - 10 min,50 - 70,Casetas Chedraui
+10-12,2 horas,Lado Chedraui,Calidad,5 - 10 min,menos de 30,Caseta CafeITO
+12-2,1 hora,CafeITO,Rapidez,menos de 5,50 - 70,Caseta CafeITO
+10-12,3 horas,Caseta Blanca,Espacio,10 - 15 min,50 - 70,Casetas Chedraui
+no tengo horario especifico,2 horas,Caseta Blanca,Precios,menos de 5,50 - 70,Caseta Caseta Blanca
+no tengo horario especifico,3 horas,Lado Chedraui,Espacio,10 - 15 min,menos de 30,Caseta CafeITO
+no tengo horario especifico,2 horas,Caseta Blanca,Precios,menos de 5,50 - 70,Caseta Caseta Blanca
+10-12,3 horas,CafeITO,Calidad,10 - 15 min,30 - 50,Casetas Chedraui
+8-10,2 horas,Caseta Blanca,Precios,menos de 5,50 - 70,Caseta Caseta Blanca
+no tengo horario especifico,1 hora,CafeITO,Variedad,menos de 5,30 - 50,Caseta CafeITO
+8-10,1 hora,Lado Chedraui,Variedad,10 - 15 min,50 - 70,Casetas Chedraui
+10-12,3 horas,Lado Chedraui,Precios,menos de 5,menos de 30,Caseta Caseta Blanca
+2-4,3 horas,Caseta Blanca,Calidad,menos de 5,50 - 70,Caseta CafeITO
+8-10,3 horas,Caseta Blanca,Precios,5 - 10 min,menos de 30,Caseta Caseta Blanca
+8-10,2 horas,Caseta Blanca,Variedad,10 - 15 min,50 - 70,Caseta CafeITO
+10-12,1 hora,Caseta Blanca,Calidad,menos de 5,50 - 70,Casetas Chedraui
+8-10,No tengo libre,CafeITO,Calidad,15 - 20 min,30 - 50,Caseta Caseta Blanca
+no tengo horario especifico,2 horas,Caseta Blanca,Calidad,15 - 20 min,50 - 70,Caseta CafeITO
+8-10,1 hora,Lado Chedraui,Rapidez,menos de 5,50 - 70,Caseta CafeITO
+8-10,1 hora,CafeITO,Atención,5 - 10 min,30 - 50,Caseta CafeITO
+8-10,2 horas,Lado Chedraui,Espacio,menos de 5,50 - 70,Caseta Caseta Blanca
+no tengo horario especifico,1 hora,CafeITO,Atención,10 - 15 min,50 - 70,Caseta CafeITO
+8-10,1 hora,Lado Chedraui,Variedad,menos de 5,50 - 70,Caseta CafeITO
