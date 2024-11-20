@@ -16,9 +16,6 @@ class AjusteCasetasGUI:
         self.crear_interfaz()
 
     def obtener_casetas_bdd(self):
-        """
-        Obtiene las casetas y sus características de la base de datos.
-        """
         cursor = self.conexion_db.cursor()
         cursor.execute("""
             SELECT id_caseta, nombre_caseta, tiempo_promedio_atencion, flujo_clientes, 
@@ -30,10 +27,6 @@ class AjusteCasetasGUI:
         return resultados
 
     def crear_interfaz(self):
-        """
-        Crea la interfaz gráfica para ajustar los valores de las casetas.
-        """
-        # Encabezados
         headers = ["Nombre", "Tiempo Atención", "Flujo Clientes", "Variedad Productos", "Calidad Comida", "Precios", "Acción"]
         for i, header in enumerate(headers):
             tk.Label(self.root, text=header, font=("Arial", 10, "bold"), bg="#e6e6e6").grid(row=0, column=i, padx=10, pady=5)
@@ -73,9 +66,6 @@ class AjusteCasetasGUI:
             update_button.grid(row=i, column=6, padx=10, pady=5)
 
     def actualizar_caseta(self, id_caseta, tiempo, flujo, variedad, calidad, precio):
-        """
-        Actualiza los valores de una caseta en la base de datos.
-        """
         cursor = self.conexion_db.cursor()
         cursor.execute("""
             UPDATE casetas
@@ -87,12 +77,7 @@ class AjusteCasetasGUI:
         print(f"Caseta {id_caseta} actualizada: Tiempo Atención={tiempo}, Flujo Clientes={flujo}, Variedad={variedad}, Calidad={calidad}, Precios={precio}")
 
     def ejecutar(self):
-        """
-        Ejecuta el loop principal de la interfaz.
-        """
         self.root.mainloop()
-
-# Ejecución de la interfaz gráfica
 if __name__ == "__main__":
     gui = AjusteCasetasGUI(dbname="Simulacion", user="diego", password="facilita", host="localhost")
     gui.ejecutar()

@@ -3,23 +3,16 @@ import random
 from caseta import Caseta
 from estudiante import Estudiante
 from conectar_bdd import ConectarBDD
-
+from mapadeCalor import simular_distribucion
 class Main:
     def __init__(self, dbname, user, password, host):
-        # Conexión a la base de datos
         self.conexion_db = ConectarBDD(dbname, user, password, host).conectar()
-        self.casetas = self.obtener_casetas_bdd()  # Cargar casetas desde la base de datos
+        self.casetas = self.obtener_casetas_bdd()
 
     def limitar_valor(self, valor):
-        """
-        Limita el valor entre 1 y 5.
-        """
         return max(1, min(5, valor))
 
     def obtener_casetas_bdd(self):
-        """
-        Obtiene las casetas y sus características de la base de datos y asegura que los valores están entre 1 y 5.
-        """
         cursor = self.conexion_db.cursor()
         cursor.execute("""
             SELECT nombre_caseta, ubicacion, tiempo_promedio_atencion, flujo_clientes,
@@ -46,16 +39,12 @@ class Main:
         
         cursor.close()
         self.caseta_nombres = caseta_nombres
-        print("Casetas disponibles:", self.caseta_nombres)  # Verificar las casetas cargadas
+        print("Casetas disponibles:", self.caseta_nombres)
         return casetas
 
     def obtener_opciones_estudiantes(self):
-        """
-        Obtiene las opciones posibles para cada característica de los estudiantes desde la base de datos con sus frecuencias.
-        """
         cursor = self.conexion_db.cursor()
 
-        # Obtener opciones y sus frecuencias para cada característica
         cursor.execute("SELECT horario_preferido, COUNT(*) FROM encuestas_estudiantes GROUP BY horario_preferido")
         horarios = [(row[0].strip(), row[1]) for row in cursor.fetchall()]
         print("Frecuencias de horario_preferido:", horarios)  # Verificar
@@ -85,9 +74,6 @@ class Main:
         return horarios, horas_libres, casetas_preferidas, factores_influencia, tiempos_espera_dispuesto, presupuestos
 
     def seleccionar_opcion_con_probabilidades(self, opciones):
-        """
-        Selecciona una opción basada en las frecuencias proporcionadas.
-        """
         total = sum(freq for opcion, freq in opciones)
         rand_val = random.uniform(0, total)
         acumulado = 0
@@ -98,12 +84,7 @@ class Main:
         return opciones[-1][0]  # En caso de algún error numérico
 
     def generar_estudiantes(self, cantidad):
-        """
-        Genera estudiantes en base a las opciones de la base de datos y las distribuciones reales.
-        """
         horarios, horas_libres, casetas_preferidas, factores_influencia, tiempos_espera_dispuesto, presupuestos = self.obtener_opciones_estudiantes()
-
-        # Inicializar contadores para caseta_preferida
         contador_casetas_preferidas = {opcion: 0 for opcion, _ in casetas_preferidas}
 
         estudiantes = []
@@ -111,7 +92,6 @@ class Main:
             caseta_pref = self.seleccionar_opcion_con_probabilidades(casetas_preferidas)
             contador_casetas_preferidas[caseta_pref] += 1  # Incrementar contador
 
-            # Verificar si la caseta preferida existe en las casetas disponibles
             if caseta_pref not in self.caseta_nombres:
                 print(f"Advertencia: Caseta preferida '{caseta_pref}' no encontrada en la lista de casetas disponibles.")
                 # Asignar una caseta al azar si la preferida no está disponible
@@ -131,17 +111,12 @@ class Main:
         return estudiantes
 
     def asignar_caseta_elegida(self, estudiantes):
-        """
-        Asigna la Caseta Elegida a cada estudiante basado en sus atributos y las características de las casetas.
-        """
         caseta_elegida = []
         for idx, estudiante in enumerate(estudiantes, start=1):
-            # Calcula una puntuación para cada caseta basada en los atributos del estudiante y las características de la caseta
             puntajes = {}
             for caseta in self.casetas:
                 puntaje = 0
 
-                # Presupuesto: Más alto el presupuesto, mayor la probabilidad de elegir casetas con precios más altos
                 if estudiante.presupuesto == "Menos de $30":
                     puntaje += (6 - caseta.precios)  # Preferir precios bajos
                 elif estudiante.presupuesto == "$30 - $50":
@@ -179,27 +154,16 @@ class Main:
                 elif estudiante.tiempo_espera_dispuesto == "Más de 20 minutos":
                     puntaje += caseta.tiempo_promedio_atencion
 
-                # Penalización para 'Lado Chedraui' para reducir su frecuencia de selección
                 if caseta.nombre == "Lado Chedraui":
-                    puntaje -= 1.3  # Aumentar la penalización
-
-                # Asegurar que el puntaje no sea negativo
+                    puntaje -= 1.1
                 puntaje = max(0, puntaje)
 
                 puntajes[caseta.nombre] = puntaje
-
-                # Debug: Imprimir puntaje por caseta para cada estudiante
-                # Descomenta la siguiente línea para ver los puntajes durante la ejecución
-                # print(f"Estudiante {idx}: Caseta {caseta.nombre}: Puntaje {puntaje}")
-
-            # Verificar si hay casetas con puntaje >0
             casetas_con_puntaje = {caseta: puntaje for caseta, puntaje in puntajes.items() if puntaje > 0}
             if not casetas_con_puntaje:
-                # Si ninguna caseta tiene puntaje positivo, asignar una caseta al azar (excluyendo 'Lado Chedraui')
                 caseta_asignada = random.choice([caseta.nombre for caseta in self.casetas if caseta.nombre != "Lado Chedraui"])
             else:
-                # Seleccionar la caseta con el puntaje más alto
-                # Alternativamente, usar una selección probabilística basada en los puntajes
+
                 caseta_asignada = random.choices(
                     population=list(casetas_con_puntaje.keys()),
                     weights=list(casetas_con_puntaje.values()),
@@ -210,9 +174,6 @@ class Main:
         return caseta_elegida
 
     def guardar_estudiantes_en_csv(self, estudiantes):
-        """
-        Guarda los datos de los estudiantes en un archivo CSV llamado 'estudiantes.csv'.
-        """
         with open("estudiantes.csv", mode="w", newline="", encoding='utf-8') as file:
             writer = csv.writer(file)
             writer.writerow([
@@ -232,9 +193,6 @@ class Main:
         print("Datos de estudiantes guardados en estudiantes.csv")
 
     def guardar_caseta_elegida_en_csv(self, caseta_elegida):
-        """
-        Guarda la Caseta Elegida en un archivo CSV llamado 'caseta_elegida.csv'.
-        """
         with open("caseta_elegida.csv", mode="w", newline="", encoding='utf-8') as file:
             writer = csv.writer(file)
             writer.writerow(["Caseta Elegida"])
@@ -254,10 +212,9 @@ class Main:
         # Asignar Caseta Elegida
         caseta_elegida = self.asignar_caseta_elegida(estudiantes)
         self.guardar_caseta_elegida_en_csv(caseta_elegida)
+        simular_distribucion()
 
-# Ejecución principal
 if __name__ == "__main__":
-    # Solicitar la cantidad de estudiantes al usuario
     try:
         cantidad = int(input("Ingrese la cantidad de estudiantes que desea generar: "))
         if cantidad <= 0:
@@ -268,3 +225,4 @@ if __name__ == "__main__":
     
     main = Main(dbname="Simulacion", user="diego", password="facilita", host="localhost")
     main.iniciar_generacion_estudiantes(cantidad)
+

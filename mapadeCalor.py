@@ -7,12 +7,12 @@ import heapq
 import re
 
 colors = [
-    (1, 1, 0.9),
-    (1, 1, 0.6),
+    (1, 1, 1),
+    (1, 1, 0.72),
     (1, 1, 0),
-    (1, 0.5, 0),
+    (1, 0.6, 0),
     (1, 0, 0),
-    (0.6, 0, 0)
+    (0.72, 0, 0)
 ]
 custom_cmap = LinearSegmentedColormap.from_list('custom_cmap', colors)
 
@@ -71,7 +71,6 @@ class HeatmapGenerator:
         plt.axis('on')  # Mostrar los ejes
         plt.show()
 
-# Implementación del algoritmo A*
 def a_star(start, goal, grid):
     filas, columnas = grid.shape
     open_set = []
@@ -107,10 +106,9 @@ def a_star(start, goal, grid):
                 f_score = tentative_g_score + heuristic(neighbor, goal)
                 heapq.heappush(open_set, (f_score, neighbor))
 
-    return []  # No se encontró camino
+    return []
 
 def heuristic(a, b):
-    # Distancia Manhattan
     return abs(a[0] - b[0]) + abs(a[1] - b[1])
 
 def leer_estudiantes():
@@ -165,21 +163,16 @@ def simular_distribucion():
         'E29:P31',
         'A34:G35'
     ]
-
-    # Convertir los caminos a coordenadas
     caminos_coords = []
     for camino_range in caminos_ranges:
         coords = parse_cell_range(camino_range)
         caminos_coords.extend(coords)
-
-    # Definir las casetas
+        
     casetas = {
         'Caseta Blanca': 'C24:D27',
         'CafeITO': 'I24:L25',
         'Lado Chedraui': 'AE4:AF6'
     }
-
-    # Convertir las casetas a coordenadas y calcular sus centros
     casetas_coords = {}
     casetas_centers = {}
     for caseta_name, caseta_range in casetas.items():
@@ -192,26 +185,21 @@ def simular_distribucion():
         center_col = int(np.mean(cols))
         casetas_centers[caseta_name] = (center_row, center_col)
 
-    # Determinar el tamaño de la cuadrícula
     max_row = max([row for row, col in caminos_coords + [coord for coords in casetas_coords.values() for coord in coords]])
     max_col = max([col for row, col in caminos_coords + [coord for coords in casetas_coords.values() for coord in coords]])
-    grid_size = max(max_row, max_col) + 5  # Añadir margen
+    grid_size = max(max_row, max_col) + 1  # Añadir margen
 
-    # Inicializar la cuadrícula con np.nan
     cuadricula = np.full((grid_size, grid_size), np.nan)
 
-    # Asignar un costo bajo (1) a las celdas que representan los caminos
     for row, col in caminos_coords:
         if 0 <= row < grid_size and 0 <= col < grid_size:
             cuadricula[row, col] = 1  # Camino transitable
 
-    # Asegurar que las entradas sean transitables
     for entrada_coords in entradas.values():
         for row, col in entrada_coords:
             if 0 <= row < grid_size and 0 <= col < grid_size:
                 cuadricula[row, col] = 1  # Entrada transitable
 
-    # Asignar un costo bajo (1) a las celdas de las casetas
     for coords in casetas_coords.values():
         for row, col in coords:
             if 0 <= row < grid_size and 0 <= col < grid_size:
@@ -244,6 +232,5 @@ def simular_distribucion():
     heatmap = HeatmapGenerator(mapa_actualizado, cmap=custom_cmap)
     heatmap.plot(annotate=False)
 
-# Ejecutar la simulación
-if __name__ == "__main__":
-    simular_distribucion()
+#if __name__ == "__main__":
+ #   simular_distribucion()
