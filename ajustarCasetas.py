@@ -4,14 +4,12 @@ from conectar_bdd import ConectarBDD
 
 class AjusteCasetasGUI:
     def __init__(self, dbname, user, password, host):
-        # Conexión a la base de datos
         self.conexion_db = ConectarBDD(dbname, user, password, host).conectar()
         self.casetas = self.obtener_casetas_bdd()
 
-        # Configuración de la interfaz de Tkinter
         self.root = tk.Tk()
         self.root.title("Ajuste de Parámetros de Casetas")
-        self.root.geometry("1100x300")  # Establece el tamaño de la ventana
+        self.root.geometry("1100x300")
         self.root.configure(bg="#e6e6e6")
         self.crear_interfaz()
 
@@ -31,9 +29,7 @@ class AjusteCasetasGUI:
         for i, header in enumerate(headers):
             tk.Label(self.root, text=header, font=("Arial", 10, "bold"), bg="#e6e6e6").grid(row=0, column=i, padx=10, pady=5)
 
-        # Crear controles para cada caseta
         for i, (id_caseta, nombre_caseta, tiempo, flujo, variedad, calidad, precio) in enumerate(self.casetas, start=1):
-            # Etiqueta de nombre de caseta
             tk.Label(self.root, text=nombre_caseta, bg="#e6e6e6").grid(row=i, column=0, padx=10, pady=5)
 
             # Deslizador para tiempo promedio de atención
