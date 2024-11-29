@@ -2,19 +2,29 @@ from matplotlib.colors import LinearSegmentedColormap
 import numpy as np
 import matplotlib.pyplot as plt
 import csv
+from matplotlib.offsetbox import OffsetImage, AnnotationBbox
+import os
 import random
 import heapq
 import re
+from matplotlib.colors import LinearSegmentedColormap
 
 colors = [
-    (1, 1, 1),
-    (1, 1, 0.72),
-    (1, 1, 0),
-    (1, 0.6, 0),
+    (0.9, 0.9, 0.9),
+    (1, 1, 0.8),
+    (1, 1, 0.6),
+    (1, 0.9, 0.4),
+    (1, 0.8, 0.2),
+    (1, 0.7, 0),
+    (1, 0.5, 0),
+    (1, 0.3, 0),
+    (1, 0.1, 0),
     (1, 0, 0),
-    (0.72, 0, 0)
+    (0.8, 0, 0),
+    (0.6, 0, 0),
 ]
 custom_cmap = LinearSegmentedColormap.from_list('custom_cmap', colors)
+
 
 def col_letter_to_index(col_letter):
     index = 0
@@ -51,7 +61,7 @@ class HeatmapGenerator:
             raise ValueError("Los datos deben ser una matriz bidimensional")
         self.cmap = cmap
 
-    def plot(self, annotate=False):
+    def plot(self, caminos_coords=None, annotate=False, images_coords=None):
         plt.figure(facecolor='white')
         masked_data = np.ma.masked_invalid(self.data)
 
@@ -60,16 +70,52 @@ class HeatmapGenerator:
         vmax = np.nanmax(self.data)
 
         # Mostrar la imagen con el colormap personalizado y límites de valores
-        plt.imshow(masked_data, cmap=self.cmap, interpolation='nearest', vmin=vmin, vmax=vmax)
+        extent = [0, self.data.shape[1], self.data.shape[0], 0]
+        plt.imshow(masked_data, cmap=self.cmap, interpolation='nearest', vmin=vmin, vmax=vmax, extent=extent)
         plt.colorbar()
 
+        # Dibujar líneas manualmente en los bordes de cada celda de camino
+        if caminos_coords is not None:
+            for (row, col) in caminos_coords:
+                # Límites superior, inferior, izquierdo, derecho
+                if (row - 1, col) not in caminos_coords:  # Línea superior
+                    plt.plot([col, col + 1], [row, row], color='black', linewidth=2)
+                if (row + 1, col) not in caminos_coords:  # Línea inferior
+                    plt.plot([col, col + 1], [row + 1, row + 1], color='black', linewidth=2)
+                if (row, col - 1) not in caminos_coords:  # Línea izquierda
+                    plt.plot([col, col], [row, row + 1], color='black', linewidth=2)
+                if (row, col + 1) not in caminos_coords:  # Línea derecha
+                    plt.plot([col + 1, col + 1], [row, row + 1], color='black', linewidth=2)
+
+        # Si se necesita anotar las celdas
         if annotate:
             for i in range(self.data.shape[0]):
                 for j in range(self.data.shape[1]):
                     if not np.isnan(self.data[i, j]):
-                        plt.text(j, i, f'{int(self.data[i, j])}', ha='center', va='center')
+                        plt.text(j + 0.5, i + 0.5, f'{int(self.data[i, j])}', ha='center', va='center')
+
+        # Añadir imágenes en coordenadas específicas con ajustes
+        if images_coords is not None:
+            ax = plt.gca()
+            for (row, col, image_path, ajuste_x, ajuste_y) in images_coords:
+                if os.path.isfile(image_path):
+                    img = plt.imread(image_path)
+                    imagebox = OffsetImage(img, zoom=0.5)  # Ajusta el zoom según sea necesario
+                    ab = AnnotationBbox(imagebox, (col + ajuste_x, row + ajuste_y), frameon=False)
+                    ax.add_artist(ab)
+                else:
+                    print(f"Archivo de imagen no encontrado: {image_path}")
+
+        # Establecer límites de los ejes para ajustarse a la cuadrícula
+        plt.xlim(0, self.data.shape[1])
+        plt.ylim(self.data.shape[0], 0)
+        plt.gca().set_aspect('equal')  # Mantener proporción 1:1
         plt.axis('on')  # Mostrar los ejes
         plt.show()
+
+
+
+
 
 def a_star(start, goal, grid):
     filas, columnas = grid.shape
@@ -187,7 +233,7 @@ def simular_distribucion():
 
     max_row = max([row for row, col in caminos_coords + [coord for coords in casetas_coords.values() for coord in coords]])
     max_col = max([col for row, col in caminos_coords + [coord for coords in casetas_coords.values() for coord in coords]])
-    grid_size = max(max_row, max_col) + 1  # Añadir margen
+    grid_size = max(max_row, max_col) + 1 # Añadir margen
 
     cuadricula = np.full((grid_size, grid_size), np.nan)
 
@@ -229,8 +275,52 @@ def simular_distribucion():
     mapa_actualizado = actualizar_mapa_de_calor(mapa_actualizado, caminos)
 
     # Visualizar el mapa de calor actualizado con el colormap personalizado
+    images_coords = []
+    for caseta_name, coords in casetas_coords.items():
+        # Construir el nombre del archivo de imagen correspondiente
+        image_filename = caseta_name.replace(' ', '').lower() + '.jpg'
+        image_path = os.path.join('img', image_filename)
+
+        if not os.path.isfile(image_path):
+            print(f"Archivo de imagen no encontrado: {image_path}")
+            continue
+
+        # Calcular la coordenada central de la caseta
+        rows = [row for row, col in coords]
+        cols = [col for row, col in coords]
+        center_row = int(np.mean(rows))
+        center_col = int(np.mean(cols))
+
+        # Ajustes específicos para la posición de la imagen
+        if caseta_name == 'Caseta Blanca':
+            ajuste_x = -1.0  # Ajusta este valor
+            ajuste_y = 0.5   # Ajusta este valor
+        elif caseta_name == 'Lado Chedraui':
+            ajuste_x = +1.5  # Ajusta este valor
+            ajuste_y = + 0.4   # Ajusta este valor
+        elif caseta_name == 'CafeITO':
+            ajuste_x = 0.0
+            ajuste_y = +1.9
+        else:
+            ajuste_x = 0.0
+            ajuste_y = 0.0
+
+        images_coords.append((center_row, center_col, image_path, ajuste_x, ajuste_y))
+
+    # Agregar la imagen del Edificio L
+    image_path_edificioL = os.path.join('img', 'edificioL.png')
+    if os.path.isfile(image_path_edificioL):
+        row_edificioL = 15  # Ajusta este valor
+        col_edificioL = 20  # Ajusta este valor
+        ajuste_x = 0.0      # Ajusta este valor
+        ajuste_y = 0.0      # Ajusta este valor
+        images_coords.append((row_edificioL, col_edificioL, image_path_edificioL, ajuste_x, ajuste_y))
+    else:
+        print(f"Archivo de imagen no encontrado: {image_path_edificioL}")
+
+    # Visualizar el mapa de calor actualizado con el colormap personalizado
     heatmap = HeatmapGenerator(mapa_actualizado, cmap=custom_cmap)
-    heatmap.plot(annotate=False)
+    heatmap.plot(caminos_coords=caminos_coords, annotate=False, images_coords=images_coords)
 
 #if __name__ == "__main__":
- #   simular_distribucion()
+#    simular_distribucion()

@@ -1,9 +1,12 @@
 import csv
 import random
+
 from caseta import Caseta
 from estudiante import Estudiante
 from conectar_bdd import ConectarBDD
 from mapadeCalor import simular_distribucion
+from matplotlib.offsetbox import OffsetImage, AnnotationBbox
+
 class Main:
     def __init__(self, dbname, user, password, host):
         self.conexion_db = ConectarBDD(dbname, user, password, host).conectar()
